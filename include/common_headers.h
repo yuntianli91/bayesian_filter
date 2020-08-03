@@ -39,3 +39,8 @@
 // custom header
 // ========== type def ======== //
 typedef unsigned long ulong;
+typedef Eigen::VectorXd VecXd;
+typedef Eigen::MatrixXd MatXd;
+typedef Eigen::Matrix<double, 1, 1> Vec1d;
+typedef Eigen::Matrix<double, 1, 1> Mat1d;
+

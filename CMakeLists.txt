@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.2.0)
 
-project(edl_simulator)
+project(bayesian_estimation)
 # 设置编译选项
 set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS "-std=c++11 -fopenmp")
@@ -13,6 +13,9 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 find_package(OpenCV REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(Ceres REQUIRED)
+
+find_package(PythonLibs REQUIRED)
+
 message("OpenCV Version: ${OpenCV_VERSION}")
 # 设置头文件包含路径
 include_directories(
@@ -21,11 +24,13 @@ include_directories(
     ${Pangolin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${CERES_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS}
     )
 # 设置第三方共享库
 set(THIRD_PARTY_LIBS
     ${OpenCV_LIBS}
-    ${Pangolin_LIBRARIES}    
+    ${Pangolin_LIBRARIES}   
+    ${PYTHON_LIBRARIES} 
     )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)
