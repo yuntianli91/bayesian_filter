@@ -1,37 +1,37 @@
-cmake_minimum_required(VERSION 3.2.0)
+# ==========================  声明Cmake最小版本  =============================== #
+cmake_minimum_required(VERSION 3.16.0)
+# 声明项目名称、版本和语言
+project(bayesian VERSION 0.2 LANGUAGES CXX)
 
-project(bayesian_estimation)
-# 设置编译选项
-set(CMAKE_BUILD_TYPE "Debug")
-set(CMAKE_CXX_FLAGS "-std=c++11 -fopenmp")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -g")
-# 设置项目路径
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
-# 寻找package
-find_package(OpenCV REQUIRED)
-find_package(Pangolin REQUIRED)
-find_package(Ceres REQUIRED)
+# ==========================  设定编译选项  ==================================== #
+# 强制开启 C++ 14以上标准以兼容ROS2
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF) # 采用通用编译参数适应跨平台编译
+# Enable compile optimizations
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+# Enable debug flags (use if you want to debug in gdb)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall")
+# 项目文件路径
+set(LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
+# ===========================  设置依赖库  ==================================== #
+# r如果存在多版本3rd库，则手动设置路径到包含对应的.cmake文件
+# set(OpenCV_DIR "")
+# set(Ceres_DIR "")
 
-find_package(PythonLibs REQUIRED)
+find_package(Ceres 2.2.0 REQUIRED)  # 非线性优化库
+find_package(Eigen3 REQUIRED)       # 矩阵运算库
+find_package(fmt REQUIRED)          # 格式化IO库
+message(STATUS "Found 3rd party packages:\n"
+  "-- => Ceres: " ${Ceres_VERSION} 
+  "\n-- => fmt: " ${fmt_VERSION}
+)
 
-message("OpenCV Version: ${OpenCV_VERSION}")
-# 设置头文件包含路径
-include_directories(
-    ${PROJECT_SOURCE_DIR}/include
-    "/usr/include/eigen3"
-    ${Pangolin_INCLUDE_DIRS}
-    ${OpenCV_INCLUDE_DIRS}
-    ${CERES_INCLUDE_DIRS}
-    ${PYTHON_INCLUDE_DIRS}
-    )
-# 设置第三方共享库
-set(THIRD_PARTY_LIBS
-    ${OpenCV_LIBS}
-    ${Pangolin_LIBRARIES}   
-    ${PYTHON_LIBRARIES} 
-    )
+set(3RD_PARTY_LIBS
+  Ceres::ceres
+  Eigen3::Eigen
+  fmt::fmt
+)
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/src)
-add_subdirectory(${PROJECT_SOURCE_DIR}/examples)
+# ============================  添加项目库  =================================== #
+# ============================  添加可执行文件  ================================ #
