@@ -24,6 +24,9 @@ set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin")
 find_package(Ceres 2.2.0 REQUIRED)  # 非线性优化库
 find_package(Eigen3 REQUIRED)       # 矩阵运算库
 find_package(fmt REQUIRED)          # 格式化IO库
+set(Python3_EXECUTABLE /usr/bin/python3.8)
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED) # python3
+
 message(STATUS "Found 3rd party packages:\n"
   "-- => Ceres: " ${Ceres_VERSION} 
   "\n-- => fmt: " ${fmt_VERSION}
@@ -33,8 +36,10 @@ set(3RD_PARTY_LIBS
   Ceres::ceres
   Eigen3::Eigen
   fmt::fmt
+  Python3::Python
+  Python3::Module
 )
-
 # ============================  添加项目库  =================================== #
-
+add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 # ============================  添加可执行文件  ================================ #
+add_subdirectory(${PROJECT_SOURCE_DIR}/example)
